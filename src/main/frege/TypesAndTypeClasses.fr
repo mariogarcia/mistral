@@ -1,0 +1,21 @@
+module TypesAndTypeClasses where
+
+-- FUNCTIONS
+
+removeNonUpperCase :: [Char] -> [Char]
+removeNonUpperCase st = [c|c <-st, c `elem` ['A'..'Z']]
+
+addThree :: Int -> Int -> Int -> Int
+addThree x y z = x + y + z
+
+factorialSimple :: Integer -> Integer
+factorialSimple 1 = 1
+factorialSimple x = x * (factorial (x - 1))
+
+factorial :: Integer -> Integer
+factorial n = product [1..n]
+
+circunference :: Float -> Float
+circunference n = 2 * 3.14 * n
+
+-- read "3" it is not implemented ?
