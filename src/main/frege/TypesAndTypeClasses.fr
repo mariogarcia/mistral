@@ -9,8 +9,8 @@ addThree :: Int -> Int -> Int -> Int
 addThree x y z = x + y + z
 
 factorialSimple :: Integer -> Integer
-factorialSimple 1 = 1
-factorialSimple x = x * (factorial (x - 1))
+factorialSimple 0 = 1
+factorialSimple x = x * factorial (x - 1)
 
 factorial :: Integer -> Integer
 factorial n = product [1..n]
