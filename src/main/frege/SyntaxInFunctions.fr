@@ -3,3 +3,38 @@ module SyntaxInFunctions where
 lucky :: (Integral a) => a -> String
 lucky 7 = "LUCKY NUMBER SEVEN!"
 lucky x = "Sorry, you're out of luck, pal!"
+
+sayNumber :: (Integral a) => a -> String
+sayNumber 1 = "One"
+sayNumber 2 = "Two"
+sayNumber _ = "Another Number"
+
+charName :: Char -> String
+charName 'a' = "Albert Einstein"
+charName 'b' = "Broseph"
+charName 'c' = "Cecil"
+
+-- Adding vectors
+addVectors :: (Double, Double) -> (Double, Double) -> (Double, Double)
+addVectors (x1,y1) (x2,y2) = (x1 + x2, y1 + y2)
+
+-- first of a triple
+getFirstOfTriple :: (Int, Int, Int) -> Int
+getFirstOfTriple (x, y, z) = x
+
+-- sum tuple members
+sumTupleMembers :: [(Int, Int)] -> [Int]
+sumTupleMembers    []           =  []
+sumTupleMembers    ((x, y) : xs)  = (x + y):(sumTupleMembers xs)
+
+-- head implementation
+heady :: [a] -> a
+heady []     = error "No allowed here"
+heady (x:_)  = x
+
+-- using show
+tellMe :: (Show a) => [a] -> String
+tellMe []       = "Empty list"
+tellMe (x:[])   = "Only one element" ++ show x
+tellMe (x:y:[]) = "Two Elements"
+tellMe (x:y:_)  = "Long " ++ "x: " ++ show x ++ ", y:" ++ show y
