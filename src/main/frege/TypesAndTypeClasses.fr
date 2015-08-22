@@ -19,3 +19,41 @@ circunference :: Float -> Float
 circunference n = 2 * 3.14 * n
 
 -- read "3" it is not implemented ?
+
+-- Pattern not complete
+-- Using [1,2] for example it throws:
+-- frege.runtime.NoMatch: badAdd at line 25 no match for value frege.prelude.PreludeBase$TList$DCons@7692d9cc
+badAdd :: (Num a) => [a] -> a
+badAdd (x:y:z:[]) = x + y + z
+
+-- As-patterns
+getFirstLetter :: [Char] -> String
+getFirstLetter []         = " Empty String sorry"
+getFirstLetter (all@x:xs) = "The first letter of " ++ packed all ++ " is " ++ show x
+
+-- Guards Guards!!
+bmiTell :: Double -> String
+bmiTell bmi
+    | bmi <= 18.5 = "You're underweight, you emo, you!"
+    | bmi <= 25.0 = "You're supposed normal"
+    | bmi <= 30.0 = "You're fat! Lose some weight, fatty!"
+    | otherwise = "You're a whale, congratulations!"
+
+bmiTell2 :: Double -> Double -> String
+bmiTell2 weight height
+    | weight / height ^ 2 <= 18.5 = "You're underweight, you emo, you!"
+    | weight / height ^ 2 <= 25.0 = "You're supposed normal"
+    | weight / height ^ 2 <= 30.0 = "You're fat! Lose some weight, fatty!"
+    | otherwise = "You're a whale, congratulations!"
+
+-- max
+max' :: (Ord a) => a -> a -> a
+max' a b
+    | a <= b    = b
+    | otherwise = a
+
+myCompare :: (Ord a) => a -> a -> Ordering
+a `myCompare` b
+    | a == b    = Eq
+    | a <= b    = Lt
+    | otherwise = Gt
