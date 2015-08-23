@@ -52,3 +52,16 @@ elem' _ []     = false
 elem' a (x:xs)
     | a == x    = true
     | otherwise = elem' a xs
+
+sortinator :: (Ord a) => [a] -> [a]
+sortinator []     = []
+sortinator (x:xs) = sortinator left ++ [x] ++ sortinator right
+    where left  = [el | el <- xs, el <= x]
+          right = [el | el <- xs, el > x ]
+
+sortinator2 :: (Ord a) => [a] -> [a]
+sortinator2 []     = []
+sortinator2 (x:xs) =
+    let smallerOrEqual = [a | a <- xs, a <= x]
+        greaterThan    = [a | a <- xs, a  > x]
+     in sortinator2 smallerOrEqual ++ [x] ++ sortinator2 greaterThan
