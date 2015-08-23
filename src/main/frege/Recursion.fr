@@ -1,0 +1,19 @@
+module Recursion where
+
+maximum' :: (Ord a) => [a] -> a
+maximum' []     = error "empty list"
+maximum' [x]    = x
+maximum' (x:xs) = max x (maximum' xs)
+
+-- replicate 3 5 ==> [5,5,5]
+replicate' :: Int -> a -> [a]
+replicate' n x
+   | n <= 0    = []
+   | otherwise = x : replicate (n - 1) x
+
+replicate2 :: Int -> a -> [a]
+replicate2 n x
+   | n <= 0     = fn1
+   | otherwise  = fn2
+   where fn1 = []
+         fn2 = x : replicate2 (n - 1) x
