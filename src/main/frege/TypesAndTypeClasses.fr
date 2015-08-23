@@ -90,3 +90,22 @@ initials firstname lastname   = f ++ ". " ++ l ++ "."
 calcBmis :: [(Double, Double)] -> [Double]
 calcBmis xs = [bmi w h | (w,h) <- xs]
     where bmi weight height = weight / height ^ 2
+
+-- let basic example
+cylinder :: Double -> Double -> Double
+cylinder r h =
+    let pi       = 3.14
+        sideArea = 2 * pi * r * h
+        topArea  = pi * r ^ 2
+     in sideArea + 2 * topArea
+
+-- let in local scope
+-- [let square x = x * x in (square 2, square 3, square 4)]
+-- (let (a,b,c) = (1,2,3) in a + b + c)
+
+-- let in list comprehensions
+-- no need to use 'let' keyword in list comprehensions in Frege
+-- although there are several solutions I like this one for this
+-- particular function
+calcBmis2 :: [(Double, Double)] -> [Double]
+calcBmis2 xs = [bmi | (w,h) <- xs, bmi = w / h ^ 2]
