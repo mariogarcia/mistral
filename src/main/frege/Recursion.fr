@@ -1,0 +1,67 @@
+module Recursion where
+
+maximum' :: (Ord a) => [a] -> a
+maximum' []     = error "empty list"
+maximum' [x]    = x
+maximum' (x:xs) = max x (maximum' xs)
+
+-- replicate 3 5 ==> [5,5,5]
+replicate' :: Int -> a -> [a]
+replicate' n x
+   | n <= 0    = []
+   | otherwise = x : replicate (n - 1) x
+
+replicate2 :: Int -> a -> [a]
+replicate2 n x
+   | n <= 0     = fn1
+   | otherwise  = fn2
+   where fn1 = []
+         fn2 = x : replicate2 (n - 1) x
+
+-- take function
+take' :: Int -> [a] -> [a]
+take' n _
+   | n <= 0    = []
+take' _ []     = []
+take' n (x:xs) = x : (take' (n - 1) xs)
+
+-- reverse
+reverse' :: [a] -> [a]
+reverse' [] = []
+reverse' (x:xs) = reverse' xs ++ [x]
+
+-- limited repeat
+repeat' :: Int -> a -> [a]
+repeat' n _
+    | n <= 0 = []
+repeat' n v  = [v] ++ repeat' (n - 1) v
+
+-- infinite repeat
+irepeat :: a -> [a]
+irepeat x = x : irepeat x
+
+-- zip [1,2] [3,4] --> [(1,3),(2,4)]
+zip' :: [a] -> [a] -> [(a,a)]
+zip' _ []          = []
+zip' [] _          = []
+zip' (x:xs) (y:ys) = [(x,y)] ++ zip' xs ys
+
+-- elem
+elem' :: (Eq a) => a -> [a] -> Bool
+elem' _ []     = false
+elem' a (x:xs)
+    | a == x    = true
+    | otherwise = elem' a xs
+
+sortinator :: (Ord a) => [a] -> [a]
+sortinator []     = []
+sortinator (x:xs) = sortinator left ++ [x] ++ sortinator right
+    where left  = [el | el <- xs, el <= x]
+          right = [el | el <- xs, el > x ]
+
+sortinator2 :: (Ord a) => [a] -> [a]
+sortinator2 []     = []
+sortinator2 (x:xs) =
+    let smallerOrEqual = [a | a <- xs, a <= x]
+        greaterThan    = [a | a <- xs, a  > x]
+     in sortinator2 smallerOrEqual ++ [x] ++ sortinator2 greaterThan

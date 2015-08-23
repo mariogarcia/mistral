@@ -1,0 +1,11 @@
+module InputOutput where
+
+-- print something to console
+println' :: String -> IO()
+println' word = putStrLn word
+
+-- executable example
+main = do
+    println $ "Hello amigo, " ++ "What's your name"
+    name <- getLine
+    println $ "Nice to meet you " ++ name
