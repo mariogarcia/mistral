@@ -70,6 +70,7 @@ bmiTell3 weight height
           normal = 25.0
           fat    = 30.0
 
+-- pattern matching in where
 bmiTell4 :: Double -> Double -> String
 bmiTell4 weight height
     | bmi <= skinny = "You're underweight, you emo, you!"
