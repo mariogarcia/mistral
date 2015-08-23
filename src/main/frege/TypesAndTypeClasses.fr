@@ -109,3 +109,19 @@ cylinder r h =
 -- particular function
 calcBmis2 :: [(Double, Double)] -> [Double]
 calcBmis2 xs = [bmi | (w,h) <- xs, bmi = w / h ^ 2]
+
+-- case expression in function
+head' :: [a] -> a
+head' xs = case xs of []     -> error "error"
+                      (x:_)  -> x
+
+describeList :: [a] -> String
+describeList xs = "This list is " ++ case xs of []    -> "Empty list"
+                                                [x]   -> "List of one single element"
+                                                xs    -> "Longer list"
+
+describeList' :: [a] -> String
+describeList' ls = "The list is " ++ what ls
+    where what []  = "empty"
+          what [x] = "list of one element"
+          what ls  = "longer list"
