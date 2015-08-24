@@ -1,11 +1,83 @@
 module InputOutput where
 
+import Data.Char
+-- import Control.Monad
+
 -- print something to console
 println' :: String -> IO()
 println' word = putStrLn word
+
+-- using let inside IO actions
+something1 :: IO ()
+something1 = do
+    putStrLn "What's your first name"
+    firstName <- getLine
+    putStrLn "What's your last name"
+    lastName <- getLine
+    let bigFirstName = firstName.toUpperCase
+        bigLastName  = lastName.toUpperCase
+    putStrLn $ "hey " ++ bigFirstName ++ " "
+                      ++ bigLastName  ++ " "
+                      ++ ", How are you ?"
 
 -- executable example
 main = do
     println $ "Hello amigo, " ++ "What's your name"
     name <- getLine
     println $ "Nice to meet you " ++ name
+
+-- when
+
+usingWhen :: IO ()
+usingWhen = do
+    input <- getLine
+    when (input == "SWORDFISH") $ do
+        putStrLn input
+
+usingWhen2 :: IO ()
+usingWhen2 = do
+    input <- getLine
+    if (input == "SWORDFISH")
+        then putStrLn input
+        else return ()
+
+usingSequence1 :: IO ()
+usingSequence1 = do
+    a <- getLine
+    b <- getLine
+    c <- getLine
+    putStrLn $ show [a, b, c]
+
+usingSequence2 :: IO ()
+usingSequence2 = do
+    rs <- sequence [getLine, getLine, getLine]
+    putStrLn $ show rs
+
+usingMapM1 :: IO [()]
+usingMapM1 = do
+    mapM putStrLn $ map show [1,2,3,4]
+
+usingMapM2 :: IO ()
+usingMapM2 = do
+    mapM_ putStrLn $ map show [1 .. 4]
+
+-- forever is within Control.Monad
+usingForever :: IO ()
+usingForever = forever $ do
+    -- if using putStr instead of putStrLn
+    -- getLine executes first
+    putStrLn "Give me some input: "
+    l <- getLine
+    putStrLn l.toUpperCase
+
+{--
+usingForM :: IO ()
+usingForM = do
+    colors <- forM [1,2,3,4] (\a -> do
+        putStrLn "Which color do you associate with the number "
+                 ++ show a ++ " ?"
+        color <- getLine
+        return color)
+    putStrLn "The colors you associated with 1,2,3,4 are: "
+    mapM putStrLn colors
+--}
