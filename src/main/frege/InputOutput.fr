@@ -1,8 +1,24 @@
 module InputOutput where
 
+import Data.Char
+
 -- print something to console
 println' :: String -> IO()
 println' word = putStrLn word
+
+
+-- using let inside IO actions
+something1 :: IO ()
+something1 = do
+    putStrLn "What's your first name"
+    firstName <- getLine
+    putStrLn "What's your last name"
+    lastName <- getLine
+    let bigFirstName = firstName.toUpperCase
+        bigLastName  = lastName.toUpperCase
+    putStrLn $ "hey " ++ bigFirstName ++ " "
+                      ++ bigLastName  ++ " "
+                      ++ ", How are you ?"
 
 -- executable example
 main = do
