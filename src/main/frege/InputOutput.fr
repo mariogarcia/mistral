@@ -70,14 +70,44 @@ usingForever = forever $ do
     l <- getLine
     putStrLn l.toUpperCase
 
-{--
-usingForM :: IO ()
-usingForM = do
-    colors <- forM [1,2,3,4] (\a -> do
-        putStrLn "Which color do you associate with the number "
-                 ++ show a ++ " ?"
+-- forM examples from discussion
+-- https://groups.google.com/forum/#!topic/frege-programming-language/p8Zq6qMwFGg
+-- using forM but I don't recommend this syntax
+usingForM1 :: IO ()
+usingForM1 = do
+    colors <- forM [1,2,3,4] ( \a -> do
+        putStrLn $ "Which color do you associate with the number " ++ show a ++ " ?"
         color <- getLine
-        return color)
+        return color
+      ) -- This can't be aligned with colors. It's really error-prone
     putStrLn "The colors you associated with 1,2,3,4 are: "
-    mapM putStrLn colors
---}
+    mapM_ putStrLn colors
+
+-- Better syntax for the same function
+usingForM2 :: IO ()
+usingForM2 = do
+    colors <- forM [1,2,3,4] $ \a -> do
+        putStrLn $ "Which color do you associate with the number " ++ show a ++ " ?"
+        color <- getLine
+        return color
+    putStrLn "The colors you associated with 1,2,3,4 are: "
+    mapM_ putStrLn colors
+
+-- Optimal syntax
+usingForM3 :: IO ()
+usingForM3 = do
+    let prompt a = do
+            putStrLn $ "Which color do you associate with the number " ++ show a ++ "?"
+            color <- getLine
+            return color
+    colors <- forM [1,2,3,4] prompt
+    putStrLn "The colors that you associate with 1, 2, 3 and 4 are: "
+    mapM_ putStrLn colors
+
+-- FILES AND STREAMS
+
+-- how to read content (be careful with indentation)
+readContent :: IO ()
+readContent = do
+  contents <- getContents
+  putStrLn contents
