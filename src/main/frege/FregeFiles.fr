@@ -1,0 +1,27 @@
+module FregeFiles where
+
+{--
+    Reads first line of a given file
+
+    [param:] filePath the path of the file we want to read
+    [throws:] IOException if an IO Exception occurs
+    [returns:] a IO String value
+--}
+readMyFile :: String -> IO String
+readMyFile filePath = do
+    reader <- openReader filePath
+    line   <- reader.getLine -- IO String
+    return line
+
+{--
+    Reads all lines of a given file
+
+    [param:] filePath the path of the file we want to read
+    [throws:] IOException if an IO Exception occurs
+    [returns:] all file text lines
+--}
+readMyFileCompletely :: String -> IO [String]
+readMyFileCompletely filePath = do
+    reader <- openReader filePath
+    lines  <- reader.getLines
+    return lines
