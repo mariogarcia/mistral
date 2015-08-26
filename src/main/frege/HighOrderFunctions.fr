@@ -93,3 +93,30 @@ numLongChains = length (filter isLong (map chain [1..100]))
 -- lambdas
 numLongChains' :: Int
 numLongChains' = length (filter (\xs -> length xs > 15) (map chain [1..100]))
+
+{--
+   "fold"
+--}
+--- sumX [1..10000] --> StackOverflow
+sumX :: (Num a) => [a] -> a
+sumX xs = foldl (\acc \x -> acc + x) 0 xs
+
+--- sumX [1..10000] --> StackOverflow
+sumX2 :: (Num a) => [a] -> a
+sumX2 xs = foldr (\x \acc -> x + acc) 0 xs
+
+--- fold has the same signature as foldl
+--- :t fold ---> (Alpha -> Beta -> Alpha) -> [Beta] -> Alpha
+sumX3 :: (Num a) => [a] -> a
+sumX3 xs = fold (\acc \x -> x + acc) 0 xs
+
+sumX4 :: (Num a) => [a] -> a
+sumX4 = fold (+) 0
+
+
+{--
+    "scan"
+--}
+
+sqrtSums :: Int
+sqrtSums = length (takeWhile (<10000) (scanl1 (+) (map (^2) [1..]))) + 1
