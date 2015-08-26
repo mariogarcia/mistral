@@ -4,3 +4,31 @@ module HighOrderFunctions where
 maxAgainstTen :: Int -> Int
 maxAgainstTen = max 10
 
+-- compare 100
+compareWithHundred :: (Num a, Ord a) => a -> Ordering
+compareWithHundred x = 100 `compare` x
+
+compareWithHundred' :: (Num a, Ord a) => a -> Ordering
+compareWithHundred' = compare 100
+
+-- divide by ten
+-- TODO Learn how number hierarchy is built
+divideByTen :: (Real a) => a -> a
+divideByTen = (/10)
+
+-- using more infix
+isUpperAlphanumeric :: Char -> Bool
+isUpperAlphanumeric = (`elem` ['A' .. 'Z'])
+
+-- apply twice a function over a value
+applyTwice :: (a -> a) -> a -> a
+applyTwice f x = f (f x)
+
+{--
+  takes a function and two lists as parameters and then joins both
+  using the function
+--}
+zipWith' :: (a -> b -> c) -> [a] -> [b] -> [c]
+zipWith' _ [] _          = []
+zipWith' _ _ []          = []
+zipWith' f (x:xs) (y:ys) = f x y : zipWith' f xs ys
