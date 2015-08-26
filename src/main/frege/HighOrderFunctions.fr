@@ -120,3 +120,31 @@ sumX4 = fold (+) 0
 
 sqrtSums :: Int
 sqrtSums = length (takeWhile (<10000) (scanl1 (+) (map (^2) [1..]))) + 1
+
+{--
+    "function application with $"
+--}
+
+calculateSomeNumbers :: Int
+calculateSomeNumbers = sum (filter (> 10) (map (*2) [2..10]))
+
+-- using $ to change association precedence and get rid of parenthesis
+calculateSomeNumbers2 :: Int
+calculateSomeNumbers2 = sum $ filter (> 10) $ map (*2) [2..10]
+
+-- applying values to functions
+mappit :: [Int]
+mappit = map ($ 3) [(1+),(2+)]
+
+
+{--
+    "function composition with ."
+--}
+
+-- combining two functions without composition
+composition1 :: [Int]
+composition1 = map (\x -> negate (abs x)) [1, -1, -3, 44]
+
+-- now using function composition
+composition2 :: [Int]
+composition2 = map (negate . abs) [1, -1, -3, 44]
