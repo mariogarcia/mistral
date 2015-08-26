@@ -74,3 +74,22 @@ sortinator3 (x:xs) =
 largestDivisible :: (Enum a, Integral a) => a
 largestDivisible = head (filter' p [x | x <- [0 .. 100000]])
     where p x = x `mod` 3829 == 0
+
+-- using takeWhile
+sumFirstHundredOddNumbers :: Int
+sumFirstHundredOddNumbers = sum $ takeWhile (<=100) (filter odd [1..])
+
+-- mixin HOFs
+chain :: (Integral a) => a -> [a]
+chain 1     = [1]
+chain n
+    | even n    = n:chain (n `div` 2)
+    | odd  n    = n:chain (n * 3 + 1)
+
+numLongChains :: Int
+numLongChains = length (filter isLong (map chain [1..100]))
+    where isLong xs = length xs > 15
+
+-- lambdas
+numLongChains' :: Int
+numLongChains' = length (filter (\xs -> length xs > 15) (map chain [1..100]))
