@@ -1,0 +1,150 @@
+module HighOrderFunctions where
+
+-- curried max
+maxAgainstTen :: Int -> Int
+maxAgainstTen = max 10
+
+-- compare 100
+compareWithHundred :: (Num a, Ord a) => a -> Ordering
+compareWithHundred x = 100 `compare` x
+
+compareWithHundred' :: (Num a, Ord a) => a -> Ordering
+compareWithHundred' = compare 100
+
+-- divide by ten
+-- TODO Learn how number hierarchy is built
+divideByTen :: (Real a) => a -> a
+divideByTen = (/10)
+
+-- using more infix
+isUpperAlphanumeric :: Char -> Bool
+isUpperAlphanumeric = (`elem` ['A' .. 'Z'])
+
+-- apply twice a function over a value
+applyTwice :: (a -> a) -> a -> a
+applyTwice f x = f (f x)
+
+{--
+  takes a function and two lists as parameters and then joins both
+  using the function
+--}
+zipWith' :: (a -> b -> c) -> [a] -> [b] -> [c]
+zipWith' _ [] _          = []
+zipWith' _ _ []          = []
+zipWith' f (x:xs) (y:ys) = f x y : zipWith' f xs ys
+
+{--
+   takes a function and return a function with the same parameters
+   only that parameters are flipped
+--}
+flip' :: (a -> b -> c) -> (b -> a -> c)
+flip' f = g
+   where g x y = f y x
+
+flip2' :: (a -> b -> c) -> (b -> a -> c)
+flip2' f x y = f y x
+
+{--
+   "map" takes a function and a list, applies that function to every
+   element of the list producing a new list
+--}
+map' :: (a -> b) -> [a] -> [b]
+map' _ [] = []
+map' f (x:xs) = f x : map' f xs
+
+{--
+   "filter" it takes a predicate and a list and return a new list with
+   the elements satisfying the predicate
+--}
+filter' :: (a -> Bool) -> [a] -> [a]
+filter' _ [] = []
+filter' p (x:xs)
+   | p x        = x : filter' p xs
+   | otherwise  = filter' p xs
+
+-- new version of quick sort using filter'
+sortinator3 :: (Ord a) => [a] -> [a]
+sortinator3 []     = []
+sortinator3 (x:xs) =
+    let smallerOrEqual = filter' (<= x) xs
+        greaterThan    = filter' (> x) xs
+     in sortinator3 smallerOrEqual ++ [x] ++ sortinator3 greaterThan
+
+-- It doesn't execute O_o TODO send to SO
+largestDivisible :: (Enum a, Integral a) => a
+largestDivisible = head (filter' p [x | x <- [0 .. 100000]])
+    where p x = x `mod` 3829 == 0
+
+-- using takeWhile
+sumFirstHundredOddNumbers :: Int
+sumFirstHundredOddNumbers = sum $ takeWhile (<=100) (filter odd [1..])
+
+-- mixin HOFs
+chain :: (Integral a) => a -> [a]
+chain 1     = [1]
+chain n
+    | even n    = n:chain (n `div` 2)
+    | odd  n    = n:chain (n * 3 + 1)
+
+numLongChains :: Int
+numLongChains = length (filter isLong (map chain [1..100]))
+    where isLong xs = length xs > 15
+
+-- lambdas
+numLongChains' :: Int
+numLongChains' = length (filter (\xs -> length xs > 15) (map chain [1..100]))
+
+{--
+   "fold"
+--}
+--- sumX [1..10000] --> StackOverflow
+sumX :: (Num a) => [a] -> a
+sumX xs = foldl (\acc \x -> acc + x) 0 xs
+
+--- sumX [1..10000] --> StackOverflow
+sumX2 :: (Num a) => [a] -> a
+sumX2 xs = foldr (\x \acc -> x + acc) 0 xs
+
+--- fold has the same signature as foldl
+--- :t fold ---> (Alpha -> Beta -> Alpha) -> [Beta] -> Alpha
+sumX3 :: (Num a) => [a] -> a
+sumX3 xs = fold (\acc \x -> x + acc) 0 xs
+
+sumX4 :: (Num a) => [a] -> a
+sumX4 = fold (+) 0
+
+
+{--
+    "scan"
+--}
+
+sqrtSums :: Int
+sqrtSums = length (takeWhile (<10000) (scanl1 (+) (map (^2) [1..]))) + 1
+
+{--
+    "function application with $"
+--}
+
+calculateSomeNumbers :: Int
+calculateSomeNumbers = sum (filter (> 10) (map (*2) [2..10]))
+
+-- using $ to change association precedence and get rid of parenthesis
+calculateSomeNumbers2 :: Int
+calculateSomeNumbers2 = sum $ filter (> 10) $ map (*2) [2..10]
+
+-- applying values to functions
+mappit :: [Int]
+mappit = map ($ 3) [(1+),(2+)]
+
+
+{--
+    "function composition with ."
+--}
+
+-- combining two functions without composition
+composition1 :: [Int]
+composition1 = map (\x -> negate (abs x)) [1, -1, -3, 44]
+
+-- now using function composition
+composition2 :: [Int]
+composition2 = map (negate . abs) [1, -1, -3, 44]
