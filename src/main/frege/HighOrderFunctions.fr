@@ -32,3 +32,45 @@ zipWith' :: (a -> b -> c) -> [a] -> [b] -> [c]
 zipWith' _ [] _          = []
 zipWith' _ _ []          = []
 zipWith' f (x:xs) (y:ys) = f x y : zipWith' f xs ys
+
+{--
+   takes a function and return a function with the same parameters
+   only that parameters are flipped
+--}
+flip' :: (a -> b -> c) -> (b -> a -> c)
+flip' f = g
+   where g x y = f y x
+
+flip2' :: (a -> b -> c) -> (b -> a -> c)
+flip2' f x y = f y x
+
+{--
+   "map" takes a function and a list, applies that function to every
+   element of the list producing a new list
+--}
+map' :: (a -> b) -> [a] -> [b]
+map' _ [] = []
+map' f (x:xs) = f x : map' f xs
+
+{--
+   "filter" it takes a predicate and a list and return a new list with
+   the elements satisfying the predicate
+--}
+filter' :: (a -> Bool) -> [a] -> [a]
+filter' _ [] = []
+filter' p (x:xs)
+   | p x        = x : filter' p xs
+   | otherwise  = filter' p xs
+
+-- new version of quick sort using filter'
+sortinator3 :: (Ord a) => [a] -> [a]
+sortinator3 []     = []
+sortinator3 (x:xs) =
+    let smallerOrEqual = filter' (<= x) xs
+        greaterThan    = filter' (> x) xs
+     in sortinator3 smallerOrEqual ++ [x] ++ sortinator3 greaterThan
+
+-- It doesn't execute O_o TODO send to SO
+largestDivisible :: (Enum a, Integral a) => a
+largestDivisible = head (filter' p [x | x <- [0 .. 100000]])
+    where p x = x `mod` 3829 == 0
