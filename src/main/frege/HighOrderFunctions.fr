@@ -1,0 +1,6 @@
+module HighOrderFunctions where
+
+-- curried max
+maxAgainstTen :: Int -> Int
+maxAgainstTen = max 10
+
