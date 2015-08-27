@@ -1,0 +1,19 @@
+module OwnTypesAndTypeClasses where
+
+{--
+    "Algebraic datatypes intro"
+--}
+
+data Shape = Circle Float Float Float | Rectangle Float Float Float Float
+
+derive Show Shape
+
+-- pattern matching with constructors
+surface :: Shape -> Float
+surface (Circle _ _ r)          = 3.14 * r ^ 2
+surface (Rectangle x1 y1 x2 y2) = (abs $ x2 - x1) * (abs $ y2 - y1)
+
+-- constructors as functions
+calculateOfRadius :: Float -> Float
+calculateOfRadius x = f x
+    where f = surface . (Circle 1 2)
