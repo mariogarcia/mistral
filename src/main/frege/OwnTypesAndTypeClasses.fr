@@ -24,3 +24,29 @@ surface (Rectangle (Point x1 y1) (Point x2 y2)) = (abs $ x2 - x1) * (abs $ y2 - 
 -- constructors as functions
 calculateOfRadius :: Float -> Float
 calculateOfRadius = surface . (Circle (Point 1 2))
+
+data Person = Person String String Int Float String String
+
+derive Show Person
+
+-- deconstructing could be cumbersome
+showPersonName :: Person -> String
+showPersonName (Person firstname lastname _ _ _ _) = show firstname ++ ", " ++ show lastname
+
+data BetterPerson = BetterPerson { firstname :: String
+                                  ,lastname  :: String
+                                  ,age       :: Int
+                                  ,height    :: Float
+                                  ,city      :: String
+                                  ,country   :: String }
+
+derive Show BetterPerson
+
+--- A way of declaring a constant. TODO there must be another way
+peter :: BetterPerson
+peter  = BetterPerson { firstname="Peter"
+                      ,lastname = "O'Brian"
+                      ,age=22
+                      ,height=1.29
+                      ,city="Dublin"
+                      ,country="Ireland" }
