@@ -1,19 +1,26 @@
 module OwnTypesAndTypeClasses where
 
+-- Number PI
+-- the value is visible when importing
+pi = 3.14
+
 {--
     "Algebraic datatypes intro"
 --}
 
-data Shape = Circle Float Float Float | Rectangle Float Float Float Float
+data Point = Point Float Float
+
+derive Show Point
+
+data Shape = Circle Point Float | Rectangle Point Point
 
 derive Show Shape
 
 -- pattern matching with constructors
 surface :: Shape -> Float
-surface (Circle _ _ r)          = 3.14 * r ^ 2
-surface (Rectangle x1 y1 x2 y2) = (abs $ x2 - x1) * (abs $ y2 - y1)
+surface (Circle _ r)                            = 3.14 * r ^ 2
+surface (Rectangle (Point x1 y1) (Point x2 y2)) = (abs $ x2 - x1) * (abs $ y2 - y1)
 
 -- constructors as functions
 calculateOfRadius :: Float -> Float
-calculateOfRadius x = f x
-    where f = surface . (Circle 1 2)
+calculateOfRadius = surface . (Circle (Point 1 2))
