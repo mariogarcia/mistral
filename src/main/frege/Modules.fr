@@ -1,0 +1,20 @@
+module Modules where
+
+-- selective import
+import Recursion ()
+
+-- alias for an import
+import InputOutput as IOC
+
+-- hiding functions from an imported module
+import HighOrderFunctions hiding (composition1)
+
+-- it only shows how to use hiding
+composition1 :: [Int] -> Int
+composition1 xs = fold (+) 0 xs
+
+-- Because we used selective import
+-- we need to be explicit using take' from
+-- recursion module
+takeThree :: [a] -> [a]
+takeThree = Recursion.take' 3
