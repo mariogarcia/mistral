@@ -1,0 +1,149 @@
+module OwnTypesAndTypeClasses where
+
+-- Number PI
+-- the value is visible when importing
+pi = 3.14
+
+{--
+    "Algebraic datatypes intro"
+--}
+
+data Point = Point Float Float
+
+derive Show Point
+
+data Shape = Circle Point Float | Rectangle Point Point
+
+derive Show Shape
+
+-- pattern matching with constructors
+surface :: Shape -> Float
+surface (Circle _ r)                            = 3.14 * r ^ 2
+surface (Rectangle (Point x1 y1) (Point x2 y2)) = (abs $ x2 - x1) * (abs $ y2 - y1)
+
+-- constructors as functions
+calculateOfRadius :: Float -> Float
+calculateOfRadius = surface . (Circle (Point 1 2))
+
+data Person = Person String String Int Float String String
+
+derive Show Person
+
+-- deconstructing could be cumbersome
+showPersonName :: Person -> String
+showPersonName (Person firstname lastname _ _ _ _) = show firstname ++ ", " ++ show lastname
+
+data BetterPerson = BetterPerson { firstname :: String
+                                  ,lastname  :: String
+                                  ,age       :: Int
+                                  ,height    :: Float
+                                  ,city      :: String
+                                  ,country   :: String }
+
+derive Show BetterPerson
+
+--- A way of declaring a constant. TODO there must be another way
+peter :: BetterPerson
+peter  = BetterPerson { firstname="Peter"
+                      ,lastname = "O'Brian"
+                      ,age=22
+                      ,height=1.29
+                      ,city="Dublin"
+                      ,country="Ireland" }
+
+
+-- ENUMERATIONS
+data VideoContainer = MP4 | MKV | AVI | OGG
+
+derive Ord  VideoContainer
+derive Enum VideoContainer
+derive Eq   VideoContainer
+derive Show VideoContainer
+
+formatLowerSingle :: VideoContainer -> String
+formatLowerSingle x = (String.toLowerCase) $ show x
+
+-- "type" KEYWORD
+
+type VC = VideoContainer
+
+-- Notice how I've ommited the parameter in the function implementation
+formatLower :: [VC] -> [String]
+formatLower = fold (\acc \v -> acc ++ [formatLowerSingle v] ) []
+-- formatLower xs = fold (\acc \v -> acc ++ [formatLowerSingle v] ) [] xs
+
+{--
+   ALIASES ("type")
+
+   My first impression about aliases is that if you are using them
+   for creating generic data types then OK otherwise adds
+   unnecessary complexity
+--}
+
+type Entry k v = [(k, v)]          -- OK
+type JJ a      = Maybe a           -- COOL BUT NOT OK (Personal opinion)
+type VCList    = [VideoContainer]  -- OK (useful). It will used as a new type
+
+-- The following could be misleading as well
+type Brand = String
+type Model = String
+type HP    = Int
+
+data Vehicle = Car Brand Model HP
+
+data Feeling = LIKES | DISLIKES | DONTCAREABOUT
+
+derive Show Feeling
+
+infixr 5 `:<`
+infixr 5 `:|`
+infixr 5 `:>`
+
+showMood :: Feeling -> Brand -> Brand -> String
+showMood f b1 b2 = b1 ++ " " ++ show f ++ " " ++ b2
+
+(`:>`) :: Brand -> Brand -> String
+(`:>`) = showMood LIKES
+
+(`:<`) :: Brand -> Brand -> String
+(`:<`) = showMood DISLIKES
+
+(`:|`) :: Brand -> Brand -> String
+(`:|`) = showMood DONTCAREABOUT
+
+{--
+   TYPECLASSES
+--}
+
+-- type class
+class MilitaryUnit a where
+   size :: a -> Int
+
+-- type
+data Squad    = Big | Small
+--data Division = Big | Small
+
+-- instance 1 of a typeclass
+instance MilitaryUnit Squad where
+   size Small = 2
+   size Big   = 14
+
+-- instance 2 of a typeclass
+{--
+instance MilitaryUnit Division where
+   size Small = 10000
+   size Big   = 20000
+--}
+
+{--
+    FUNCTOR
+--}
+
+class Functor' f where
+    fmap' :: (a -> b) -> f a -> f b
+
+data Might a = Some a | None
+
+instance Functor' Might where
+    fmap' f (Some x) = Some (f x)
+    fmap' f None     = None
