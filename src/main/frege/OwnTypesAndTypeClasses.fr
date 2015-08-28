@@ -50,3 +50,63 @@ peter  = BetterPerson { firstname="Peter"
                       ,height=1.29
                       ,city="Dublin"
                       ,country="Ireland" }
+
+
+-- ENUMERATIONS
+data VideoContainer = MP4 | MKV | AVI | OGG
+
+derive Ord  VideoContainer
+derive Enum VideoContainer
+derive Eq   VideoContainer
+derive Show VideoContainer
+
+formatLowerSingle :: VideoContainer -> String
+formatLowerSingle x = (String.toLowerCase) $ show x
+
+-- "type" KEYWORD
+
+type VC = VideoContainer
+
+-- Notice how I've ommited the parameter in the function implementation
+formatLower :: [VC] -> [String]
+formatLower = fold (\acc \v -> acc ++ [formatLowerSingle v] ) []
+-- formatLower xs = fold (\acc \v -> acc ++ [formatLowerSingle v] ) [] xs
+
+{--
+   ALIASES ("type")
+
+   My first impression about aliases is that if you are using them
+   for creating generic data types then OK otherwise adds
+   unnecessary complexity
+--}
+
+type Entry k v = [(k, v)]          -- OK
+type JJ a      = Maybe a           -- COOL BUT NOT OK (Personal opinion)
+type VCList    = [VideoContainer]  -- OK (useful). It will used as a new type
+
+-- The following could be misleading as well
+type Brand = String
+type Model = String
+type HP    = Int
+
+data Vehicle = Car Brand Model HP
+
+data Feeling = LIKES | DISLIKES | DONTCAREABOUT
+
+derive Show Feeling
+
+infixr 5 `:<`
+infixr 5 `:|`
+infixr 5 `:>`
+
+showMood :: Feeling -> Brand -> Brand -> String
+showMood f b1 b2 = b1 ++ " " ++ show f ++ " " ++ b2
+
+(`:>`) :: Brand -> Brand -> String
+(`:>`) = showMood LIKES
+
+(`:<`) :: Brand -> Brand -> String
+(`:<`) = showMood DISLIKES
+
+(`:|`) :: Brand -> Brand -> String
+(`:|`) = showMood DONTCAREABOUT
