@@ -110,3 +110,40 @@ showMood f b1 b2 = b1 ++ " " ++ show f ++ " " ++ b2
 
 (`:|`) :: Brand -> Brand -> String
 (`:|`) = showMood DONTCAREABOUT
+
+{--
+   TYPECLASSES
+--}
+
+-- type class
+class MilitaryUnit a where
+   size :: a -> Int
+
+-- type
+data Squad    = Big | Small
+--data Division = Big | Small
+
+-- instance 1 of a typeclass
+instance MilitaryUnit Squad where
+   size Small = 2
+   size Big   = 14
+
+-- instance 2 of a typeclass
+{--
+instance MilitaryUnit Division where
+   size Small = 10000
+   size Big   = 20000
+--}
+
+{--
+    FUNCTOR
+--}
+
+class Functor' f where
+    fmap' :: (a -> b) -> f a -> f b
+
+data Might a = Some a | None
+
+instance Functor' Might where
+    fmap' f (Some x) = Some (f x)
+    fmap' f None     = None
