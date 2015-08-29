@@ -25,3 +25,25 @@ readMyFileCompletely filePath = do
     reader <- openReader filePath
     lines  <- reader.getLines
     return lines
+
+-- packing files in a zip file (zt-zip library)
+data ZIP = pure native org.zeroturnaround.zip.ZipUtil where
+    native pack org.zeroturnaround.zip.ZipUtil.pack :: MutableIO File -> MutableIO File -> IO ()
+                                                     | MutableIO File -> MutableIO File -> Bool -> IO ()
+                                                     | MutableIO File -> MutableIO File -> Int  -> IO ()
+{--
+   (File.new "/anypath") returns a (STMutable a File) instance to be able
+   to use it in a (MutableIO File) argument you should use "bind" whether
+   using the `>>=` operator or using the "do" notation like the following
+   function.
+--}
+
+{--
+   [param:] source the dir we want to zip
+   [param:] destination the name of the file zip we want to create
+--}
+packDir :: String -> String -> IO ()
+packDir source destination = do
+    sourceFile      <- File.new source
+    destinationFile <- File.new destination
+    ZIP.pack sourceFile destinationFile
