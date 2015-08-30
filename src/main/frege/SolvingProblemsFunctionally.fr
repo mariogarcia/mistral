@@ -1,0 +1,20 @@
+module SolvingProblemsFunctionally where
+
+{--
+   Read is not implemented in Frege yet. In the meantime
+   to complete the RPN exercise, I have narrow the problem
+   for Int types.
+--}
+fakeRead :: String -> Int
+fakeRead a = 
+    case a.int of
+       Left x  = 0
+       Right y = y
+
+-- Reverse Polish Notation
+solveRPN :: String -> Int
+solveRPN = head . fold fn [] . words
+    where fn (x:y:ys) "*" = (x * y):ys
+          fn (x:y:ys) "+" = (x + y):ys
+          fn (x:y:ys) "-" = (x - y):ys
+          fn xs numberString = fakeRead numberString:xs
