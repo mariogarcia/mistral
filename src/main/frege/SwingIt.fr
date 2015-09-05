@@ -1,0 +1,12 @@
+module SwingIt where
+
+import Java.Swing
+
+helloWorldGUI = do
+    frame <- JFrame.new "Hello World Frege"
+    frame.setDefaultCloseOperation(JFrame.dispose_on_close)
+    label <- JLabel.new "Hello World!"
+    cp <- frame.getContentPane
+    cp.add label
+    frame.pack
+    frame.setVisible true
